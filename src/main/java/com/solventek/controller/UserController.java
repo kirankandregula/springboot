@@ -34,6 +34,11 @@ public class UserController {
 		return userRepository.findAll();
 	}
 	
+	@GetMapping("/get/{id}")
+	public User getUserById(@PathVariable Integer id) {
+		return userRepository.findById(id).orElseThrow(()->new NoSuchElementException("user not found with the id"+id));
+	}
+	
 	@PostMapping("/add")
 	public User addUser(@RequestBody User user) {
 		return userRepository.save(user);
@@ -47,7 +52,7 @@ public class UserController {
 					newUser.setUserName(user.getUserName());
 					newUser.setPassWord(user.getPassWord());
 					newUser.setRole(user.getRole());
-					
+					userRepository.save(newUser);
 					return newUser;
 				}).orElseThrow(()-> new NoSuchElementException("user id not found with the id "+id));
 				
